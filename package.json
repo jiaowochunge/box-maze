@@ -1,0 +1,32 @@
+{
+  "name": "box-maze",
+  "version": "1.0.0",
+  "description": "TypeScript做的推箱子小游戏",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server --config webpack.config.dev.js",
+    "build": "webpack --config webpack.config.prod.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/react": "^16.9.23",
+    "@types/react-dom": "^16.9.5",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^5.1.1",
+    "html-webpack-plugin": "^4.0.1",
+    "source-map-loader": "^0.2.4",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.8.3",
+    "webpack": "^4.42.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3",
+    "webpack-merge": "^4.2.2"
+  },
+  "dependencies": {
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0"
+  }
+}
