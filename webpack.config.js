@@ -40,6 +40,22 @@ module.exports = {
         enforce: 'pre',
         test: /\.js$/,
         loader: 'source-map-loader'
+      },
+      {
+        test: /\.(gif|png|jpg|ico)$/,
+        use: {
+          loader: 'file-loader',
+          options: {
+            name: './asset/img/[hash].[ext]'
+          }
+        }
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader'
+        ]
       }
     ]
   },

@@ -1,0 +1,12 @@
+.map-container {
+  position: absolute;
+}
+
+.map-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.map-actor {
+  position: absolute;
+}

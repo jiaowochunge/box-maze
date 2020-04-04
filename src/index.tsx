@@ -1,9 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import { Hello } from './components/Hello'
+import { Game } from 'components/Game'
 
 ReactDOM.render(
-  <Hello compiler='TypeScript' framework='React' />,
+  <Game level={1} />,
   document.getElementById('app')
 )
