@@ -11,3 +11,10 @@ export enum MoveDirection {
   Right,
   Bottom
 }
+
+export enum ActorType {
+  Null = 0,
+  Hero = 1,
+  Box = 1 << 1,
+  Dst = 1 << 2
+}

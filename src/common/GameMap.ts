@@ -1,3 +1,5 @@
+import { MoveDirection } from 'common/Constants'
+
 export class Size {
   width: number
   height: number
@@ -29,6 +31,27 @@ export class Coor {
   constructor(x: number, y: number) {
     this.x = x
     this.y = y
+  }
+
+  neighbour(direct: MoveDirection): Coor {
+    const n = new Coor(this.x, this.y)
+
+    switch (direct) {
+      case MoveDirection.Left:
+        n.x -= 1
+        break
+      case MoveDirection.Right:
+        n.x += 1
+        break
+      case MoveDirection.Top:
+        n.y -= 1
+        break
+      case MoveDirection.Bottom:
+        n.y += 1
+        break
+    }
+
+    return n
   }
 
   static serialize(data: Coor): string {

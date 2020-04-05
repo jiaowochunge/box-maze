@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from 'react'
 
 import { GameMap, Coor } from 'common/GameMap'
-import { MoveDirection } from 'common/Constants'
+import { TileType, MoveDirection, ActorType } from 'common/Constants'
 import { Tile } from 'components/Tile'
 
 import sampleMap from 'assets/maps/sample.json'
 import 'assets/css/game.css'
 import dstImg from 'assets/images/target.gif'
 import boxImg from 'assets/images/box1.gif'
+import box2Img from 'assets/images/box2.gif'
 import heroImg from 'assets/images/worker.gif'
 
 export interface GameProps {
   level: number
   onSuccess?: () => void
 }
+
+// 为了计算方便，把‘箱子’，‘目标点’，‘人物’放到这个二维数组中
+let actorMap: number[][]
 
 export const Game = (props: GameProps) => {
   const tileLen = 30
@@ -24,7 +28,9 @@ export const Game = (props: GameProps) => {
     fetch(sampleMap)
       .then(res => res.text())
       .then(res => {
-        setMapData(GameMap.deserialize(res))
+        const tmpMapData = GameMap.deserialize(res)
+        initActorMap(tmpMapData)
+        setMapData(tmpMapData)
       }, error => {
         alert(error)
       })
@@ -36,6 +42,25 @@ export const Game = (props: GameProps) => {
       document.removeEventListener('keyup', keyUp)
     }
   })
+
+  /**
+   * 为了方便计算，我们把‘箱子’，‘目标点’，‘人物’放到一个二维数组中
+   * 使用位运算，使这三者可以重叠放在一个点上
+   */
+  function initActorMap(mapData: GameMap): void {
+    actorMap = []
+    for (let i = 0; i < mapData.size.height; i++) {
+      actorMap.push([])
+      for (let j = 0; j < mapData.size.width; j++) {
+        actorMap[i][j] = ActorType.Null
+      }
+    }
+    actorMap[mapData.hero.y][mapData.hero.x] |= ActorType.Hero
+    for (let i = 0, box = mapData.box[0], dst = mapData.dst[0]; box = mapData.box[i], dst = mapData.dst[i]; i++) {
+      actorMap[box.y][box.x] |= ActorType.Box
+      actorMap[dst.y][dst.x] |= ActorType.Dst
+    }
+  }
 
   function drawMap() {
     if (mapData == null)
@@ -80,7 +105,7 @@ export const Game = (props: GameProps) => {
       {
         mapData.box.map((value, index) => (
           <div className='map-actor' style={calcPosition(value)} key={index}>
-            <img src={boxImg} />
+            <img src={actorMap[value.y][value.x] & ActorType.Dst ? box2Img : boxImg} />
           </div>
         ))
       }
@@ -111,19 +136,48 @@ export const Game = (props: GameProps) => {
   }
 
   function keyActionHandler(direct: MoveDirection): void {
-    switch (direct) {
-      case MoveDirection.Left:
-        setMapData({...mapData, hero: new Coor(mapData.hero.x - 1, mapData.hero.y)})
-        break
-      case MoveDirection.Right:
-        setMapData({...mapData, hero: new Coor(mapData.hero.x + 1, mapData.hero.y)})
-        break
-      case MoveDirection.Top:
-        setMapData({...mapData, hero: new Coor(mapData.hero.x, mapData.hero.y - 1)})
-        break
-      case MoveDirection.Bottom:
-        setMapData({...mapData, hero: new Coor(mapData.hero.x, mapData.hero.y + 1)})
-        break
+    const nextHero = mapData.hero.neighbour(direct)
+
+    // 如果有箱子
+    for (let i = 0, box = mapData.box[0]; box = mapData.box[i]; i++) {
+      if (box.x == nextHero.x && box.y == nextHero.y) {
+        // 箱子是否撞墙或存在另一个箱子
+        const nextBox = box.neighbour(direct)
+        if (mapData.map[nextBox.y][nextBox.x] == TileType.Obstacle ||
+          actorMap[nextBox.y][nextBox.x] & ActorType.Box) {
+          return
+        }
+        // 没撞墙，先更新actorMap
+        actorMap[mapData.hero.y][mapData.hero.x] ^= ActorType.Hero
+        actorMap[nextHero.y][nextHero.x] |= ActorType.Hero
+        actorMap[box.y][box.x] ^= ActorType.Box
+        actorMap[nextBox.y][nextBox.x] |= ActorType.Box
+
+        const nextMapData = {...mapData, hero: nextHero}
+        nextMapData.box.splice(i, 1, nextBox)
+
+        setMapData(nextMapData)
+
+        // 结算是否获胜
+        let matchCount = 0
+        for (let j = 0; j < nextMapData.box.length; j++) {
+          let box = nextMapData.box[j]
+          // 如果有一个目标点与箱子不重合，那就没有获胜
+          if (!(actorMap[box.y][box.x] & ActorType.Dst)) {
+            return
+          }
+        }
+        // 延迟回调。等动作执行完毕
+        if (props.onSuccess) {
+          setTimeout(props.onSuccess, 100)
+        }
+        return
+      }
+    }
+
+    // 如果没有箱子，是否撞墙
+    if (mapData.map[nextHero.y][nextHero.x] == TileType.Road) {
+      setMapData({...mapData, hero: nextHero})
     }
   }
 
