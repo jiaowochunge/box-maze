@@ -6,10 +6,11 @@ import wallImg from 'assets/images/wall.gif'
 
 export interface TileProps {
   type: TileType
+  width: number
 }
 
 export const Tile = (props: TileProps) => {
-  let { type, ...rest } = props
+  let { type, width, ...rest } = props
 
   let innerImg: any = null
   switch (type) {
@@ -22,7 +23,7 @@ export const Tile = (props: TileProps) => {
   }
 
   return (
-    <div style={{width: '30px', height: '30px'}} {...rest}>
+    <div style={{width: `${width}px`, height: `${width}px`}} {...rest}>
       {innerImg}
     </div>
   )

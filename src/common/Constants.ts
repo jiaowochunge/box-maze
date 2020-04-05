@@ -4,3 +4,10 @@ export enum TileType {
   Obstacle,
   Road
 }
+
+export enum MoveDirection {
+  Left,
+  Top,
+  Right,
+  Bottom
+}

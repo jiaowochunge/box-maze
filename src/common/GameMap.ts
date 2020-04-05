@@ -16,9 +16,9 @@ export class Size {
   }
 
   static deserialize(data: string): Size {
-    let tmp: any[] = data.split(',')
+    let tmp: string[] = data.split(',')
 
-    return new Size(tmp[0] as number, tmp[1] as number)
+    return new Size(parseInt(tmp[0]), parseInt(tmp[1]))
   }
 }
 
@@ -40,9 +40,9 @@ export class Coor {
   }
 
   static deserialize(data: string): Coor {
-    let tmp: any[] = data.split(',')
+    let tmp: string[] = data.split(',')
 
-    return new Coor(tmp[0] as number, tmp[1] as number)
+    return new Coor(parseInt(tmp[0]), parseInt(tmp[1]))
   }
 }
 
