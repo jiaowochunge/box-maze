@@ -2,14 +2,10 @@ import React, { useState, useEffect } from 'react'
 
 import { GameMap, Coor } from 'common/GameMap'
 import { TileType, MoveDirection, ActorType } from 'common/Constants'
-import { Tile } from 'components/Tile'
+import { Tile, ActorTile } from 'components/Tile'
 
 import sampleMap from 'assets/maps/sample.json'
 import 'assets/css/game.css'
-import dstImg from 'assets/images/target.gif'
-import boxImg from 'assets/images/box1.gif'
-import box2Img from 'assets/images/box2.gif'
-import heroImg from 'assets/images/worker.gif'
 
 export interface GameProps {
   level: number
@@ -86,8 +82,6 @@ export const Game = (props: GameProps) => {
 
     const calcPosition = (c: Coor) => (
       {
-        width: tileLen,
-        height: tileLen,
         top: c.y * tileLen,
         left: c.x * tileLen
       }
@@ -97,21 +91,26 @@ export const Game = (props: GameProps) => {
       <>
       {
         mapData.dst.map((value, index) => (
-          <div className='map-actor' style={calcPosition(value)} key={index}>
-            <img src={dstImg} />
-          </div>
+          <ActorTile
+            type={ActorType.Dst}
+            width={tileLen}
+            style={calcPosition(value)}
+            key={index}
+          />
         ))
       }
       {
         mapData.box.map((value, index) => (
-          <div className='map-actor' style={calcPosition(value)} key={index}>
-            <img src={actorMap[value.y][value.x] & ActorType.Dst ? box2Img : boxImg} />
-          </div>
+          <ActorTile
+            type={ActorType.Box}
+            width={tileLen}
+            style={calcPosition(value)}
+            reach={(actorMap[value.y][value.x] & ActorType.Dst) != 0}
+            key={index}
+          />
         ))
       }
-        <div className='map-actor' style={calcPosition(mapData.hero)}>
-          <img src={heroImg} />
-        </div>
+        <ActorTile type={ActorType.Hero} width={tileLen} style={calcPosition(mapData.hero)} />
       </>
     )
   }
