@@ -1,9 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import { Game } from 'components/Game'
+import { Home } from 'components/Home'
 
 ReactDOM.render(
-  <Game level={1} onSuccess={() => alert('you win')} />,
+  <Home />,
   document.getElementById('app')
 )

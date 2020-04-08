@@ -59,20 +59,19 @@ export const Game = (props: GameProps) => {
   }
 
   function drawMap() {
-    if (mapData == null)
+    if (mapData == null) {
       return null
+    }
 
-    return mapData.map.map((row, i1) => {
-      return (
-        <div key={i1} className='map-row'>
-        {
-          row.map((value, i2) => (
-            <Tile type={value} key={i2} width={tileLen} />
-          ))
-        }
-        </div>
-      )
-    })
+    return mapData.map.map((row, i) => (
+      <div key={i} className='map-row'>
+      {
+        row.map((value, j) => (
+          <Tile type={value} key={j} width={tileLen} />
+        ))
+      }
+      </div>
+    ))
   }
 
   function drawActor() {

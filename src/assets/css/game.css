@@ -10,3 +10,8 @@
 .map-actor {
   position: absolute;
 }
+
+.map-editor-tile {
+  position: relative;
+  border: solid 1px;
+}

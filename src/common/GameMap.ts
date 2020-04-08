@@ -84,6 +84,18 @@ export class GameMap {
   box: Coor[]
   dst: Coor[]
 
+  static default(): GameMap {
+    const tmp = new GameMap
+
+    tmp.size = new Size(0, 0)
+    tmp.map = null
+    tmp.hero = null
+    tmp.box = []
+    tmp.dst = []
+
+    return tmp
+  }
+
   static serialize(data: GameMap): string {
     let tmp = {} as EncodeGameMap
     tmp.size = Size.serialize(data.size)
@@ -102,8 +114,8 @@ export class GameMap {
     ret.size = Size.deserialize(tmp.size)
     ret.map = tmp.map
     ret.hero = Coor.deserialize(tmp.hero)
-    ret.box = tmp.box.map(v => Coor.deserialize(v as string))
-    ret.dst = tmp.dst.map(v => Coor.deserialize(v as string))
+    ret.box = tmp.box.map(v => Coor.deserialize(v))
+    ret.dst = tmp.dst.map(v => Coor.deserialize(v))
 
     return ret
   }

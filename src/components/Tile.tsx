@@ -61,3 +61,24 @@ export const ActorTile = (props: ActorTileProps) => {
     </div>
   )
 }
+
+
+export interface EditorTileProps {
+  width: number
+  tileType: TileType
+  actorType: ActorType
+  reach?: boolean
+}
+
+export const EditorTile = (props: EditorTileProps) => {
+  const {width, tileType, actorType, reach, ...rest} = props
+
+  return (
+    <div className='map-editor-tile' {...rest}>
+      <Tile type={tileType} width={width} />
+      {
+        props.actorType == ActorType.Null ? null : <ActorTile type={actorType} width={width} reach={reach} style={{position: 'absolute', top: 0, left: 0}} />
+      }
+    </div>
+  )
+}
