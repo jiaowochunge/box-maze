@@ -68,6 +68,9 @@ export interface EditorTileProps {
   tileType: TileType
   actorType: ActorType
   reach?: boolean
+  // 这两个事件我是真不会加，整了两三个小时没搞明白怎么直接加事件到 component 上，最后只能声明属性
+  onMouseEnter: (e: React.MouseEvent<HTMLDivElement>) => void
+  onMouseLeave: (e: React.MouseEvent<HTMLDivElement>) => void
 }
 
 export const EditorTile = (props: EditorTileProps) => {

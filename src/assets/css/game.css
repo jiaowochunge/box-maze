@@ -13,5 +13,21 @@
 
 .map-editor-tile {
   position: relative;
-  border: solid 1px;
+  border-top: solid 1px;
+  border-left: solid 1px;
+}
+
+.map-editor-menu {
+  position: absolute;
+  width: 100px;
+  border: solid 1px gray;
+  border-radius: 8px;
+  background-color: white;
+}
+
+.map-editor-container {
+  display: inline-block;
+  position: relative;
+  border-bottom: solid 1px;
+  border-right: solid 1px;
 }
