@@ -21,15 +21,21 @@ export const Game = (props: GameProps) => {
 
   useEffect(() => {
     // fetch level map
-    fetch(sampleMap)
-      .then(res => res.text())
-      .then(res => {
-        const tmpMapData = GameMap.deserialize(res)
-        initActorMap(tmpMapData)
-        setMapData(tmpMapData)
-      }, error => {
-        alert(error)
-      })
+    if (process.env.NODE_ENV == 'development') {
+      fetch(sampleMap)
+        .then(res => res.text())
+        .then(res => {
+          const tmpMapData = GameMap.deserialize(res)
+          initActorMap(tmpMapData)
+          setMapData(tmpMapData)
+        }, error => {
+          alert(error)
+        })
+    } else {
+      const tmpMapData = GameMap.deserialize(JSON.stringify(sampleMap))
+      initActorMap(tmpMapData)
+      setMapData(tmpMapData)
+    }
   }, [])
   useEffect(() => {
     document.addEventListener('keyup', keyUp)
