@@ -53,7 +53,7 @@ export const MapEditor = (props: MapEditorProps) => {
     if (validateMap() && props.onSaveMap) {
       props.onSaveMap.call(null, mapData)
     }
-    event.preventDefault()
+    e.preventDefault()
   }
 
   function validateMap(): boolean {

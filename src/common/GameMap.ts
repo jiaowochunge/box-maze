@@ -10,7 +10,7 @@ export class Size {
   }
 
   static serialize(data: Size): string {
-    let tmp: number[]
+    let tmp: number[] = []
     tmp.push(data.width)
     tmp.push(data.height)
 
@@ -55,7 +55,7 @@ export class Coor {
   }
 
   static serialize(data: Coor): string {
-    let tmp: number[]
+    let tmp: number[] = []
     tmp.push(data.x)
     tmp.push(data.y)
 
