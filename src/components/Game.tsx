@@ -3,8 +3,8 @@ import React, { useState, useEffect } from 'react'
 import { GameMap, Coor } from 'common/GameMap'
 import { TileType, MoveDirection, ActorType } from 'common/Constants'
 import { Tile, ActorTile } from 'components/Tile'
+import { sharedMapRepo } from 'common/MapRepositoryWebSQLImpl'
 
-import sampleMap from 'assets/maps/sample.json'
 import 'assets/css/game.css'
 
 export interface GameProps {
@@ -21,22 +21,14 @@ export const Game = (props: GameProps) => {
 
   useEffect(() => {
     // fetch level map
-    if (process.env.NODE_ENV == 'development') {
-      fetch(sampleMap)
-        .then(res => res.text())
-        .then(res => {
-          const tmpMapData = GameMap.deserialize(res)
-          initActorMap(tmpMapData)
-          setMapData(tmpMapData)
-        }, error => {
-          alert(error)
-        })
-    } else {
-      const tmpMapData = GameMap.deserialize(JSON.stringify(sampleMap))
+    sharedMapRepo.single(props.level).then(record => {
+      const tmpMapData = GameMap.deserialize(record.mapData)
       initActorMap(tmpMapData)
       setMapData(tmpMapData)
-    }
-  }, [])
+    }).catch(error => {
+      alert(error.message)
+    })
+  }, [props.level])
   useEffect(() => {
     document.addEventListener('keyup', keyUp)
 
